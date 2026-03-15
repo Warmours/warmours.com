@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portafolio · QubitX, IkarusIA, NFC & Scripts</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@300;400;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --black:  #04040a;
+      --white:  #f2f0eb;
+      --dim:    #8a8880;
+      --accent1:#49c436;
+      --accent2:#a89060;
+      --border: rgba(255,255,255,0.07);
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      position: relative;
+      padding: 32px 24px 72px;
+    }
+
+    .page {
+      max-width: 1080px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 18px;
+    }
+
+    .brand {
+      font-family: 'Cinzel', serif;
+      letter-spacing: 0.25em;
+      font-size: 12px;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+
+    .brand strong {
+      color: var(--accent1);
+      font-weight: 400;
+    }
+
+    .tagline {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(242,240,235,0.6);
+      font-family: 'Cinzel', serif;
+    }
+
+    .hero {
+      margin-bottom: 40px;
+    }
+
+    .hero-title {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(26px, 4vw, 40px);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .hero-title em {
+      font-style: normal;
+      color: var(--accent1);
+    }
+
+    .hero-sub {
+      font-style: italic;
+      font-size: 16px;
+      color: var(--dim);
+      max-width: 520px;
+      line-height: 1.6;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 22px;
+      margin-bottom: 40px;
+    }
+
+    .card {
+      border: 1px solid var(--border);
+      background: rgba(8,10,8,0.85);
+      padding: 18px 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+    }
+
+    .card-title {
+      font-family: 'Cinzel', serif;
+      font-size: 13px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .card-tag {
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+
+    .card-body {
+      font-size: 14px;
+      color: var(--dim);
+      line-height: 1.6;
+    }
+
+    .card-meta {
+      font-size: 11px;
+      color: rgba(242,240,235,0.55);
+    }
+
+    .pill-row {
+      margin-top: 4px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .pill {
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.12);
+      font-size: 11px;
+      padding: 3px 9px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(242,240,235,0.7);
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .btn-link {
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 7px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      color: var(--white);
+      background: transparent;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+
+    .btn-link.primary {
+      border-color: var(--accent1);
+      color: var(--black);
+      background: var(--accent1);
+    }
+
+    .btn-link:hover {
+      border-color: var(--accent2);
+      background: rgba(168,144,96,0.12);
+    }
+
+    .btn-link.primary:hover {
+      background: #56d84b;
+      border-color: #56d84b;
+    }
+
+    section.scripts {
+      border-top: 1px solid var(--border);
+      padding-top: 26px;
+    }
+
+    section.scripts h2 {
+      font-family: 'Cinzel', serif;
+      font-size: 13px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    section.scripts p {
+      font-size: 14px;
+      color: var(--dim);
+      max-width: 520px;
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+
+    footer {
+      margin-top: auto;
+      border-top: 1px solid var(--border);
+      padding-top: 14px;
+      font-size: 11px;
+      color: rgba(138,136,128,0.6);
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    @media (max-width: 640px) {
+      body { padding: 18px 16px 64px; }
+      header { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .tagline { font-size: 9px; }
+      footer { flex-direction: column; font-size: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="brand">
+        <strong>Recio Labs</strong> · Portfolio
+      </div>
+      <p class="tagline">Repos listos para GitHub</p>
+    </header>
+
+    <section class="hero">
+      <h1 class="hero-title">
+        Sistemas&nbsp;<em>IA</em>, NFC &amp; Scripts
+      </h1>
+      <p class="hero-sub">
+        Colección curada de proyectos listos para versionarse en GitHub:
+        trading algorítmico, asistentes de voz, control de mascotas, NFC
+        para gobierno y prevención de pérdidas basada en RFID/UHF.
+      </p>
+    </section>
+
+    <section class="grid" aria-label="Proyectos principales">
+      <article class="card">
+        <div class="card-head">
+          <h2 class="card-title">QubitX</h2>
+          <span class="card-tag">Trading · IA</span>
+        </div>
+        <p class="card-body">
+          Plataforma de trading algorítmico modular (v1–v3): backtesting,
+          ejecución en vivo y orquestación de estrategias con énfasis en
+          riesgo y trazabilidad de decisiones.
+        </p>
+        <p class="card-meta">
+          Carpeta base sugerida: <strong>Proyectos/QubitX_MIX/</strong>
+        </p>
+        <div class="pill-row">
+          <span class="pill">Python</span>
+          <span class="pill">Backtesting</span>
+          <span class="pill">Ejecución en vivo</span>
+        </div>
+        <div class="btn-row">
+          <a class="btn-link primary" href="#">Abrir repo</a>
+          <a class="btn-link" href="#">Ver documentación</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card-head">
+          <h2 class="card-title">IkarusIA</h2>
+          <span class="card-tag">Asistente · Voz</span>
+        </div>
+        <p class="card-body">
+          Asistente de IA con voz, orquestación de flujos y RAG para
+          automatizar llamadas y encuestas. Ideal para campañas y soporte.
+        </p>
+        <p class="card-meta">
+          Carpeta base sugerida: <strong>ICARUS_V2.6/</strong>
+        </p>
+        <div class="pill-row">
+          <span class="pill">FastAPI</span>
+          <span class="pill">Twilio</span>
+          <span class="pill">RAG</span>
+        </div>
+        <div class="btn-row">
+          <a class="btn-link primary" href="#">Abrir repo</a>
+          <a class="btn-link" href="#">Flow de llamadas</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card-head">
+          <h2 class="card-title">PetControl</h2>
+          <span class="card-tag">Mascotas · NFC</span>
+        </div>
+        <p class="card-body">
+          Concepto para control y recuperación de mascotas con tags NFC y
+          panel de dueño/veterinario. Proyecto a estructurar como nuevo repo.
+        </p>
+        <p class="card-meta">
+          Carpeta sugerida: <strong>Proyectos/PetControl/</strong>
+        </p>
+        <div class="pill-row">
+          <span class="pill">NFC</span>
+          <span class="pill">Next.js</span>
+          <span class="pill">API REST</span>
+        </div>
+        <div class="btn-row">
+          <a class="btn-link primary" href="#">Abrir repo</a>
+          <a class="btn-link" href="#">Idea funcional</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card-head">
+          <h2 class="card-title">NFC ICV GOB</h2>
+          <span class="card-tag">Gobierno · NFC</span>
+        </div>
+        <p class="card-body">
+          Propuesta para credenciales y verificación ciudadana mediante NFC,
+          pensada para instituciones de gobierno y control de acceso.
+        </p>
+        <p class="card-meta">
+          Carpeta sugerida: <strong>Proyectos/NFC_ICV_GOB/</strong>
+        </p>
+        <div class="pill-row">
+          <span class="pill">NFC</span>
+          <span class="pill">Seguridad</span>
+          <span class="pill">Gobierno</span>
+        </div>
+        <div class="btn-row">
+          <a class="btn-link primary" href="#">Abrir repo</a>
+          <a class="btn-link" href="#">Casos de uso</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card-head">
+          <h2 class="card-title">Loss Prevention</h2>
+          <span class="card-tag">Retail · RFID/UHF</span>
+        </div>
+        <p class="card-body">
+          Suite de prevención de pérdidas usando NFC y RFID/UHF para tiendas
+          y almacenes: inventarios en tiempo real y alertas de salida.
+        </p>
+        <p class="card-meta">
+          Carpeta sugerida: <strong>Proyectos/Loss_Prevention/</strong>
+        </p>
+        <div class="pill-row">
+          <span class="pill">RFID</span>
+          <span class="pill">UHF</span>
+          <span class="pill">Dashboards</span>
+        </div>
+        <div class="btn-row">
+          <a class="btn-link primary" href="#">Abrir repo</a>
+          <a class="btn-link" href="#">Arquitectura</a>
+        </div>
+      </article>
+    </section>
+
+    <section class="scripts" aria-label="Colección de scripts">
+      <h2>Scripts &amp; herramientas</h2>
+      <p>
+        Colección de scripts que pueden evolucionar a aplicaciones completas:
+        por ejemplo <strong>Encontrar Comprador</strong>, <strong>Dongle Pawnshop</strong>
+        y otros utilitarios. Cada script puede convertirse en un micro–repositorio
+        independiente o vivir en un monorepo.
+      </p>
+      <div class="pill-row">
+        <span class="pill">Encontrar Comprador</span>
+        <span class="pill">Dongle Pawnshop</span>
+        <span class="pill">Pentesting utils</span>
+      </div>
+      <div class="btn-row" style="margin-top: 16px;">
+        <a class="btn-link primary" href="#">Abrir carpeta Scripts</a>
+        <a class="btn-link" href="#">Guía para organizar repos</a>
+      </div>
+    </section>
+
+    <footer>
+      <span>Esta carpeta <strong>GitHub_Ready</strong> está pensada como staging: aquí solo entra lo que ya aprobaste para subir.</span>
+      <span>Podrás separar cada tarjeta en su propio repo o mantener este portafolio como landing principal.</span>
+    </footer>
+  </div>
+</body>
+</html>
+
