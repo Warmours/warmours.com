@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Icarus-IA | Cognitive Financial Intelligence</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root[data-theme="dark"] {
+            --bg: #000000;
+            --text: #00d4ff;
+            --sphere: #10b981;
+            --glow: rgba(16, 185, 129, 0.8);
+        }
+
+        :root[data-theme="light"] {
+            --bg: #ffffff;
+            --text: #10b981;
+            --sphere: #10b981;
+            --glow: rgba(16, 185, 129, 0.6);
+        }
+
+        body {
+            background: var(--bg);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            cursor: pointer;
+            position: relative;
+            transition: background 0.3s ease;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--text);
+            border-radius: 50%;
+            opacity: 0.5;
+        }
+
+        .logo-top {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            font-family: monospace;
+            font-size: 16px;
+            color: var(--text);
+            letter-spacing: 2px;
+            z-index: 100;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.05);
+            border: 2px solid var(--text);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(180deg);
+            box-shadow: 0 0 20px var(--glow);
+        }
+
+        .theme-toggle svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--text);
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .floating-sphere {
+            position: fixed;
+            right: -200px;
+            bottom: 20%;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, 
+                var(--sphere), 
+                #059669 65%, 
+                #000);
+            box-shadow: 
+                0 0 100px var(--glow),
+                0 0 200px var(--glow),
+                inset -60px -60px 120px rgba(0, 0, 0, 0.6),
+                inset 40px 40px 80px rgba(255, 255, 255, 0.1);
+            animation: float 6s ease-in-out infinite;
+            z-index: 5;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            50% { transform: translateY(-30px) translateX(-20px); }
+        }
+
+        .center-content {
+            position: relative;
+            text-align: center;
+            z-index: 10;
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 96px;
+            font-weight: 400;
+            letter-spacing: 40px;
+            color: var(--text);
+            text-shadow: 
+                0 0 30px var(--glow),
+                0 0 60px var(--glow),
+                0 0 90px var(--glow);
+            margin: 0;
+            padding: 0;
+        }
+
+        .subtitle {
+            margin-top: 30px;
+            font-size: 16px;
+            letter-spacing: 4px;
+            color: var(--text);
+            opacity: 0.6;
+            animation: blink 2s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* POPUP */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .popup-overlay.active {
+            display: flex;
+        }
+
+        .popup-content {
+            background: rgba(26, 26, 26, 0.95);
+            border: 2px solid var(--text);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 450px;
+            width: 90%;
+            box-shadow: 0 0 50px var(--glow);
+            position: relative;
+        }
+
+        .popup-content h2 {
+            font-family: 'Cinzel', serif;
+            color: var(--text);
+            font-size: 28px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .popup-content p {
+            color: #6b7280;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .popup-content input {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(16, 185, 129, 0.3);
+            border-radius: 10px;
+            color: var(--text);
+            font-size: 16px;
+            font-family: 'Courier New', monospace;
+            transition: all 0.3s ease;
+        }
+
+        .popup-content input:focus {
+            outline: none;
+            border-color: var(--text);
+            box-shadow: 0 0 15px var(--glow);
+        }
+
+        .popup-content button {
+            width: 100%;
+            padding: 15px;
+            background: var(--text);
+            color: #000;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Cinzel', serif;
+            letter-spacing: 2px;
+        }
+
+        .popup-content button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px var(--glow);
+        }
+
+        .skip-btn {
+            background: transparent !important;
+            color: #6b7280 !important;
+            margin-top: 10px;
+            font-size: 12px;
+        }
+
+        .skip-btn:hover {
+            color: var(--text) !important;
+        }
+
+        .footer-release {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            color: #6b7280;
+            font-size: 10px;
+            font-family: monospace;
+            z-index: 100;
+        }
+
+        @media (max-width: 768px) {
+            .floating-sphere {
+                width: 350px;
+                height: 350px;
+                right: -150px;
+            }
+            
+            h1 {
+                font-size: 56px;
+                letter-spacing: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="logo-top">ΙΚΑΡΟΣ</div>
+    
+    <div class="theme-toggle" onclick="event.stopPropagation(); toggleTheme();">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+        </svg>
+    </div>
+
+    <div class="floating-sphere"></div>
+
+    <div class="center-content" onclick="enterSite()">
+        <h1>IKARUS</h1>
+        <p class="subtitle">TAP TO ENTER</p>
+        
+         <p class="subtitle">Collection evolved: Education, not intimidation.</p>
+
+
+         <p class="subtitle"> Clientes no pagan porque están bloqueados, asustados o confundidos.<br> Ikarus negocia por WhatsApp, voz y SMS como un humano educado<br> y convierte excusas en pagos.<br><br> • Reduce quejas y riesgos legales<br> • Aumenta recuperación sin contratar más agentes </p>
+    </div>
+
+    <!-- POPUP -->
+    <div class="popup-overlay" id="popupOverlay">
+        <div class="popup-content" onclick="event.stopPropagation()">
+            <h2>WELCOME</h2>
+            <p>Help us personalize your experience</p>
+            <input type="text" id="userName" placeholder="Your name" />
+            <input type="email" id="userEmail" placeholder="Email (optional)" />
+            <input type="tel" id="userPhone" placeholder="Phone (optional)" />
+            <button onclick="saveAndEnter()">CONTINUE</button>
+            <button class="skip-btn" onclick="skipAndEnter()">Skip</button>
+        </div>
+    </div>
+
+    <div class="footer-release">RELEASE T-26D</div>
+
+    <script>
+        window.chtlConfig = { chatbotId: "7825123996" }
+    </script>
+    <script async data-id="7825123996" id="chtl-script" type="text/javascript" src="https://chatling.ai/js/embed.js"></script>
+
+    <script src="./js/tracking.js"></script>
+    <script>
+        function getCookie(name) {
+            const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+            return match ? decodeURIComponent(match[2]) : null;
+        }
+
+        function setCookie(name, value, days = 365) {
+            const expires = new Date(Date.now() + days * 864e5).toUTCString();
+            document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/; SameSite=Lax`;
+        }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const current = html.getAttribute('data-theme');
+            const newTheme = current === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('icarus-theme', newTheme);
+        }
+
+        function showPopup() {
+            document.getElementById('popupOverlay').classList.add('active');
+        }
+
+        function saveAndEnter() {
+            const name = document.getElementById('userName').value.trim();
+            const email = document.getElementById('userEmail').value.trim();
+            const phone = document.getElementById('userPhone').value.trim();
+
+            if (name) setCookie('icarus_username', name);
+            if (email) setCookie('icarus_email', email);
+            if (phone) setCookie('icarus_phone', phone);
+
+            // Send to tracking
+            if (typeof window.sendLeadData === 'function') {
+                window.sendLeadData({
+                    name: name || 'Anonymous',
+                    email: email || '',
+                    phone: phone || '',
+                    source: 'index_popup'
+                });
+            }
+
+            document.getElementById('popupOverlay').classList.remove('active');
+            window.location.href = 'core.html';
+        }
+
+        function skipAndEnter() {
+            document.getElementById('popupOverlay').classList.remove('active');
+            window.location.href = 'core.html';
+        }
+
+        function enterSite() {
+            const hasVisited = getCookie('icarus_visited');
+            
+            if (!hasVisited) {
+                setCookie('icarus_visited', 'true');
+                showPopup();
+            } else {
+                window.location.href = 'core.html';
+            }
+        }
+
+        // Load theme
+        const savedTheme = localStorage.getItem('icarus-theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
+        // Generate stars
+        for (let i = 0; i < 200; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.opacity = Math.random() * 0.7 + 0.2;
+            document.body.appendChild(star);
+        }
+
+        // Initialize tracking
+        window.addEventListener('load', () => {
+            if (typeof window.initTracking === 'function') {
+                window.initTracking();
+            }
+        });
+    </script>
+    <script src="./js/chat-sphere.js"></script>
+</body>
+</html>

@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Personalized Proposal - Icarus-IA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root[data-theme="dark"] {
+            --bg: #000000;
+            --text: #00d4ff;
+            --sphere: #10b981;
+            --glow: rgba(16, 185, 129, 0.8);
+        }
+
+        :root[data-theme="light"] {
+            --bg: #ffffff;
+            --text: #10b981;
+            --sphere: #10b981;
+            --glow: rgba(16, 185, 129, 0.6);
+        }
+
+        body {
+            background: var(--bg);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+            transition: background 0.3s ease;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--text);
+            border-radius: 50%;
+            opacity: 0.5;
+        }
+
+        .logo-top {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            font-family: monospace;
+            font-size: 16px;
+            color: var(--text);
+            letter-spacing: 2px;
+            z-index: 100;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.05);
+            border: 2px solid var(--text);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(180deg);
+            box-shadow: 0 0 20px var(--glow);
+        }
+
+        .theme-toggle svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--text);
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .floating-sphere {
+            position: fixed;
+            right: -200px;
+            bottom: 20%;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, 
+                var(--sphere), 
+                #059669 65%, 
+                #000);
+            box-shadow: 
+                0 0 100px var(--glow),
+                0 0 200px var(--glow),
+                inset -60px -60px 120px rgba(0, 0, 0, 0.6),
+                inset 40px 40px 80px rgba(255, 255, 255, 0.1);
+            animation: float 6s ease-in-out infinite;
+            z-index: 5;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            50% { transform: translateY(-30px) translateX(-20px); }
+        }
+
+        .center-content {
+            position: relative;
+            text-align: center;
+            z-index: 10;
+            max-width: 800px;
+            padding: 40px;
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 72px;
+            font-weight: 400;
+            letter-spacing: 30px;
+            color: var(--text);
+            text-shadow: 
+                0 0 30px var(--glow),
+                0 0 60px var(--glow),
+                0 0 90px var(--glow);
+            margin: 0;
+            padding: 0;
+            margin-bottom: 40px;
+        }
+
+        .message {
+            font-family: 'Courier New', monospace;
+            font-size: 20px;
+            line-height: 1.8;
+            color: var(--text);
+            margin-bottom: 40px;
+            text-shadow: 0 0 10px var(--glow);
+        }
+
+        .personalized {
+            font-family: 'Cinzel', serif;
+            font-size: 24px;
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+
+        .countdown {
+            font-size: 48px;
+            font-family: 'Cinzel', serif;
+            color: var(--text);
+            margin: 30px 0;
+            text-shadow: 0 0 20px var(--glow);
+        }
+
+        .cta-button {
+            background: var(--text);
+            color: #000;
+            border: none;
+            padding: 18px 50px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            font-family: 'Cinzel', serif;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 30px var(--glow);
+            margin: 10px;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 50px var(--glow);
+        }
+
+        .footer-release {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            color: #6b7280;
+            font-size: 10px;
+            font-family: monospace;
+            z-index: 100;
+        }
+
+        @media (max-width: 768px) {
+            .floating-sphere {
+                width: 350px;
+                height: 350px;
+                right: -150px;
+            }
+            
+            h1 {
+                font-size: 48px;
+                letter-spacing: 15px;
+            }
+
+            .message {
+                font-size: 16px;
+            }
+
+            .countdown {
+                font-size: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="logo-top">ICARUS</div>
+    
+    <div class="theme-toggle" onclick="toggleTheme();">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+        </svg>
+    </div>
+
+    <div class="floating-sphere"></div>
+
+    <div class="center-content">
+        <h1>ICARUS</h1>
+        
+        <p class="personalized" id="personalizedGreeting">Thank you!</p>
+        
+        <p class="message">
+            Within 24 hours, you will receive a personalized proposal<br>
+            tailored to your business needs.
+        </p>
+
+        <div class="countdown" id="countdown">24:00:00</div>
+
+        <p class="message" style="font-size: 16px; opacity: 0.7;">
+            We're analyzing your responses and preparing<br>
+            a custom solution for your business.
+        </p>
+
+        <button class="cta-button" onclick="window.location.href='index.html'">
+            RETURN HOME
+        </button>
+
+        <button class="cta-button" onclick="window.location.href='dashboard.html'">
+            VIEW DASHBOARD
+        </button>
+    </div>
+
+    <div class="footer-release">RELEASE T-26D</div>
+
+    <script>
+        window.chtlConfig = { chatbotId: "7825123996" }
+    </script>
+    <script async data-id="7825123996" id="chtl-script" type="text/javascript" src="https://chatling.ai/js/embed.js"></script>
+
+    <script src="./js/tracking.js"></script>
+    <script>
+        function getCookie(name) {
+            const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+            return match ? decodeURIComponent(match[2]) : null;
+        }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const current = html.getAttribute('data-theme');
+            const newTheme = current === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('icarus-theme', newTheme);
+        }
+
+        // Personalized greeting
+        const userName = getCookie('icarus_username');
+        if (userName) {
+            document.getElementById('personalizedGreeting').textContent = `Thank you, ${userName}!`;
+        }
+
+        // Countdown timer
+        let timeLeft = 24 * 60 * 60; // 24 hours in seconds
+        
+        function updateCountdown() {
+            const hours = Math.floor(timeLeft / 3600);
+            const minutes = Math.floor((timeLeft % 3600) / 60);
+            const seconds = timeLeft % 60;
+            
+            document.getElementById('countdown').textContent = 
+                `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            
+            if (timeLeft > 0) {
+                timeLeft--;
+            }
+        }
+
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // Load theme
+        const savedTheme = localStorage.getItem('icarus-theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
+        // Generate stars
+        for (let i = 0; i < 200; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.opacity = Math.random() * 0.7 + 0.2;
+            document.body.appendChild(star);
+        }
+
+        // Initialize tracking
+        window.addEventListener('load', () => {
+            if (typeof window.initTracking === 'function') {
+                window.initTracking();
+            }
+
+            // Send completion event
+            if (typeof window.sendLeadData === 'function') {
+                window.sendLeadData({
+                    name: userName || 'Anonymous',
+                    source: 'demo_page_reached',
+                    action: 'funnel_completed'
+                });
+            }
+        });
+    </script>
+    <script src="./js/chat-sphere.js"></script>
+</body>
+</html>

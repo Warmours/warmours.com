@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customize Your Demo - Icarus-IA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root[data-theme="dark"] {
+            --bg: #000000;
+            --card-bg: rgba(26, 26, 26, 0.9);
+            --text: #00d4ff;
+            --text-secondary: #6b7280;
+            --border: #2a2a2a;
+            --sphere: #10b981;
+            --glow: rgba(16, 185, 129, 0.8);
+        }
+
+        :root[data-theme="light"] {
+            --bg: #f5f7fa;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text: #10b981;
+            --text-secondary: #6b7280;
+            --border: #e5e7eb;
+            --sphere: #10b981;
+            --glow: rgba(16, 185, 129, 0.6);
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Courier New', monospace;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            transition: background 0.3s ease;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .star {
+            position: fixed;
+            width: 2px;
+            height: 2px;
+            background: var(--text);
+            border-radius: 50%;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .logo-top {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            font-family: 'Cinzel', serif;
+            font-size: 16px;
+            letter-spacing: 2px;
+            z-index: 100;
+            color: var(--text);
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.05);
+            border: 2px solid var(--text);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(180deg);
+        }
+
+        .theme-toggle svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--text);
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .floating-sphere {
+            position: fixed;
+            right: -200px;
+            top: 30%;
+            width: 450px;
+            height: 450px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, 
+                var(--sphere), 
+                #059669 65%, 
+                #000);
+            box-shadow: 
+                0 0 100px var(--glow),
+                0 0 200px var(--glow),
+                inset -60px -60px 120px rgba(0, 0, 0, 0.6),
+                inset 40px 40px 80px rgba(255, 255, 255, 0.1);
+            animation: float 8s ease-in-out infinite;
+            z-index: 1;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            50% { transform: translateY(-35px) translateX(-25px); }
+        }
+
+        .container { 
+            max-width: 600px; 
+            width: 100%; 
+            position: relative;
+            z-index: 10;
+        }
+
+        h1 {
+            text-align: center;
+            font-family: 'Cinzel', serif;
+            font-size: 28px;
+            letter-spacing: 4px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px var(--glow);
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: var(--border);
+            border-radius: 10px;
+            margin-bottom: 40px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--text);
+            width: 20%;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px var(--glow);
+        }
+
+        .question-card {
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .question-number {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+        }
+
+        .question-text {
+            font-size: 20px;
+            margin-bottom: 30px;
+            color: var(--text);
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .option {
+            background: var(--bg);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .option:hover {
+            border-color: var(--text);
+            transform: translateX(5px);
+        }
+
+        .option.selected {
+            border-color: var(--text);
+            background: rgba(16, 185, 129, 0.1);
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .option-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border);
+            border-radius: 4px;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .option.selected .option-checkbox {
+            background: var(--text);
+            border-color: var(--text);
+        }
+
+        .footer-release {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            color: #6b7280;
+            font-size: 10px;
+            font-family: monospace;
+            z-index: 100;
+        }
+
+        @media (max-width: 768px) {
+            .floating-sphere {
+                width: 350px;
+                height: 350px;
+                right: -150px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .question-card {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="logo-top">ICARUS</div>
+    
+    <div class="theme-toggle" onclick="toggleTheme();">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+        </svg>
+    </div>
+
+    <div class="floating-sphere"></div>
+
+    <div class="container">
+        <h1>CUSTOMIZE YOUR DEMO</h1>
+        <p class="subtitle">Help us understand your business better</p>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressBar"></div>
+        </div>
+
+        <div class="question-card">
+            <div class="question-number" id="questionNumber">Question 1 of 5</div>
+            <div class="question-text" id="questionText">¿Cuál es tu nicho principal?</div>
+            
+            <div class="options" id="optionsContainer"></div>
+        </div>
+    </div>
+
+    <div class="footer-release">RELEASE T-26D</div>
+
+    <script>
+        window.chtlConfig = { chatbotId: "7825123996" }
+    </script>
+    <script async data-id="7825123996" id="chtl-script" type="text/javascript" src="https://chatling.ai/js/embed.js"></script>
+
+    <script src="./js/tracking.js"></script>
+    <script>
+        const questions = [
+            { 
+                question: '¿Cuál es tu nicho principal?', 
+                options: ['Retail', 'Gimnasio / Fitness', 'Servicios', 'Otro'] 
+            },
+            { 
+                question: '¿Tamaño de Negocio?', 
+                options: ['1', 'Menos de 10', 'Más de 10'] 
+            },
+            { 
+                question: '¿Cómo contactas a tus clientes?', 
+                options: ['WhatsApp', 'Email', 'Teléfono', 'Redes sociales'] 
+            },
+            { 
+                question: '¿Qué porcentaje de clientes paga a tiempo?', 
+                options: ['Menos del 12%', 'Menos del 20%', 'Menos del 32%', 'Arriba del 49%'] 
+            },
+            { 
+                question: '¿Cuál es tu mayor desafío?', 
+                options: ['Cobro de pagos', 'Generación de leads', 'Seguimiento', 'Automatización'] 
+            }
+        ];
+
+        let currentQuestion = 0;
+        const answers = {};
+
+        function getCookie(name) {
+            const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+            return match ? decodeURIComponent(match[2]) : null;
+        }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const current = html.getAttribute('data-theme');
+            const newTheme = current === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('icarus-theme', newTheme);
+        }
+
+        function renderQuestion() {
+            const q = questions[currentQuestion];
+            document.getElementById('questionNumber').textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+            document.getElementById('questionText').textContent = q.question;
+            
+            const container = document.getElementById('optionsContainer');
+            container.innerHTML = '';
+            
+            q.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.innerHTML = `
+                    <div class="option-checkbox"></div>
+                    <div class="option-text">${option}</div>
+                `;
+                optionDiv.onclick = () => selectOption(index, option);
+                container.appendChild(optionDiv);
+            });
+            
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        function selectOption(index, option) {
+            answers[currentQuestion] = option;
+            
+            document.querySelectorAll('.option').forEach((el, i) => {
+                el.classList.toggle('selected', i === index);
+            });
+            
+            setTimeout(() => {
+                currentQuestion++;
+                if (currentQuestion < questions.length) {
+                    renderQuestion();
+                } else {
+                    // Save answers and send to tracking
+                    localStorage.setItem('icarus-survey-answers', JSON.stringify(answers));
+                    
+                    // Send complete survey data
+                    if (typeof window.sendLeadData === 'function') {
+                        const userName = getCookie('icarus_username') || 'Anonymous';
+                        const userEmail = getCookie('icarus_email') || '';
+                        const userPhone = getCookie('icarus_phone') || '';
+                        
+                        window.sendLeadData({
+                            name: userName,
+                            email: userEmail,
+                            phone: userPhone,
+                            survey: answers,
+                            source: 'survey_completed'
+                        });
+                    }
+                    
+                    window.location.href = 'thanks.html';
+                }
+            }, 500);
+        }
+
+        const savedTheme = localStorage.getItem('icarus-theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
+        for (let i = 0; i < 150; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.opacity = Math.random() * 0.7 + 0.2;
+            document.body.appendChild(star);
+        }
+
+        // Initialize
+        window.addEventListener('load', () => {
+            renderQuestion();
+            
+            if (typeof window.initTracking === 'function') {
+                window.initTracking();
+            }
+        });
+    </script>
+    <script src="./js/chat-sphere.js"></script>
+</body>
+</html>
+

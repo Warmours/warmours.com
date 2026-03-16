@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You - Icarus-IA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root[data-theme="dark"] {
+            --bg: #000000;
+            --card-bg: rgba(26, 26, 26, 0.9);
+            --text: #00d4ff;
+            --text-secondary: #6b7280;
+            --border: #2a2a2a;
+            --sphere: #10b981;
+            --glow: rgba(16, 185, 129, 0.8);
+        }
+
+        :root[data-theme="light"] {
+            --bg: #f5f7fa;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text: #10b981;
+            --text-secondary: #6b7280;
+            --border: #e5e7eb;
+            --sphere: #10b981;
+            --glow: rgba(16, 185, 129, 0.6);
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Courier New', monospace;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            transition: background 0.3s ease;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .star {
+            position: fixed;
+            width: 2px;
+            height: 2px;
+            background: var(--text);
+            border-radius: 50%;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .logo-top {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            font-family: 'Cinzel', serif;
+            font-size: 16px;
+            letter-spacing: 2px;
+            z-index: 100;
+            color: var(--text);
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.05);
+            border: 2px solid var(--text);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover { transform: rotate(180deg); }
+
+        .theme-toggle svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--text);
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .floating-sphere {
+            position: fixed;
+            right: -200px;
+            top: 30%;
+            width: 450px;
+            height: 450px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, 
+                var(--sphere), 
+                #059669 65%, 
+                #000);
+            box-shadow: 
+                0 0 100px var(--glow),
+                0 0 200px var(--glow),
+                inset -60px -60px 120px rgba(0, 0, 0, 0.6),
+                inset 40px 40px 80px rgba(255, 255, 255, 0.1);
+            animation: float 8s ease-in-out infinite;
+            z-index: 1;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            50% { transform: translateY(-35px) translateX(-25px); }
+        }
+
+        .container { 
+            max-width: 900px; 
+            width: 100%; 
+            position: relative;
+            z-index: 10;
+        }
+
+        h1 {
+            text-align: center;
+            font-family: 'Cinzel', serif;
+            font-size: 28px;
+            letter-spacing: 4px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px var(--glow);
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: var(--border);
+            border-radius: 10px;
+            margin-bottom: 40px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--text);
+            width: 100%;
+            box-shadow: 0 0 10px var(--glow);
+        }
+
+        .thanks-card {
+            background: var(--card-bg);
+            border: 2px solid var(--text);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .thanks-card h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 32px;
+            margin-bottom: 10px;
+            color: var(--text);
+            text-shadow: 0 0 20px var(--glow);
+        }
+
+        .thanks-card p {
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+        }
+
+        .personalized-msg {
+            font-size: 18px;
+            color: var(--text);
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .answers-list {
+            text-align: left;
+            background: var(--bg);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .answer-item {
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .answer-item:last-child { border-bottom: none; }
+
+        .answer-number {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .answer-text {
+            color: var(--text);
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .cta-button {
+            background: var(--text);
+            color: #000;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            font-family: 'Cinzel', serif;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 30px var(--glow);
+            margin: 10px;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 50px var(--glow);
+        }
+
+        .stripe-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: var(--text);
+            text-decoration: none;
+            font-size: 14px;
+            border: 2px solid var(--text);
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .stripe-link:hover {
+            background: var(--text);
+            color: #000;
+        }
+
+        .footer-release {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            color: #6b7280;
+            font-size: 10px;
+            font-family: monospace;
+            z-index: 100;
+        }
+
+        @media (max-width: 768px) {
+            .floating-sphere {
+                width: 350px;
+                height: 350px;
+                right: -150px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .thanks-card {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="logo-top">ICARUS</div>
+    
+    <div class="theme-toggle" onclick="toggleTheme();">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+        </svg>
+    </div>
+
+    <div class="floating-sphere"></div>
+
+    <div class="container">
+        <h1>CUSTOMIZE YOUR DEMO</h1>
+        <p class="subtitle">Thank you for your responses</p>
+
+        <div class="progress-bar">
+            <div class="progress-fill"></div>
+        </div>
+
+        <div class="thanks-card">
+            <h2>THANK YOU! 🎉</h2>
+            <p class="personalized-msg" id="personalizedMsg">A pleasure working with you!</p>
+            <p>Your responses have been recorded</p>
+
+            <div class="answers-list" id="answersList"></div>
+
+            <button class="cta-button" onclick="window.location.href='demo.html'">
+                VIEW PERSONALIZED DEMO
+            </button>
+
+            <br>
+
+            <a href="https://buy.stripe.com/dRm28r3lE9LS3z61GwbQY01" class="stripe-link" target="_blank">
+                💳 Secure Payment via Stripe
+            </a>
+        </div>
+    </div>
+
+    <div class="footer-release">RELEASE T-26D</div>
+
+    <script>
+        window.chtlConfig = { chatbotId: "7825123996" }
+    </script>
+    <script async data-id="7825123996" id="chtl-script" type="text/javascript" src="https://chatling.ai/js/embed.js"></script>
+
+    <script src="./js/tracking.js"></script>
+    <script>
+        function getCookie(name) {
+            const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+            return match ? decodeURIComponent(match[2]) : null;
+        }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const current = html.getAttribute('data-theme');
+            const newTheme = current === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('icarus-theme', newTheme);
+        }
+
+        const savedTheme = localStorage.getItem('icarus-theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
+        // Personalized message
+        const userName = getCookie('icarus_username');
+        if (userName) {
+            document.getElementById('personalizedMsg').textContent = `A pleasure, ${userName}!`;
+        }
+
+        const questions = [
+            '¿Cuál es tu nicho principal?',
+            '¿Tamaño de Negocio?',
+            '¿Cómo contactas a tus clientes?',
+            '¿Qué porcentaje de clientes paga a tiempo?',
+            '¿Cuál es tu mayor desafío?'
+        ];
+
+        const answers = JSON.parse(localStorage.getItem('icarus-survey-answers') || '{}');
+        const answersList = document.getElementById('answersList');
+
+        questions.forEach((q, i) => {
+            const div = document.createElement('div');
+            div.className = 'answer-item';
+            div.innerHTML = `
+                <div class="answer-number">${i + 1}. ${q}</div>
+                <div class="answer-text">→ ${answers[i] || 'No answer'}</div>
+            `;
+            answersList.appendChild(div);
+        });
+
+        for (let i = 0; i < 150; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.opacity = Math.random() * 0.7 + 0.2;
+            document.body.appendChild(star);
+        }
+
+        window.addEventListener('load', () => {
+            if (typeof window.initTracking === 'function') {
+                window.initTracking();
+            }
+        });
+    </script>
+    <script src="./js/chat-sphere.js"></script>
+</body>
+</html>

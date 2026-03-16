@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Icarus-IA | Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root[data-theme="dark"] {
+            --bg: #000000;
+            --card-bg: rgba(26, 26, 26, 0.9);
+            --text: #00d4ff;
+            --text-secondary: #6b7280;
+            --border: #2a2a2a;
+            --sphere: #10b981;
+            --glow: rgba(16, 185, 129, 0.8);
+        }
+
+        :root[data-theme="light"] {
+            --bg: #f5f7fa;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text: #10b981;
+            --text-secondary: #6b7280;
+            --border: #e5e7eb;
+            --sphere: #10b981;
+            --glow: rgba(16, 185, 129, 0.6);
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Courier New', monospace;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            transition: background 0.3s ease;
+            padding: 20px;
+        }
+
+        .star {
+            position: fixed;
+            width: 2px;
+            height: 2px;
+            background: var(--text);
+            border-radius: 50%;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .logo-top {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            font-family: 'Cinzel', serif;
+            font-size: 16px;
+            letter-spacing: 2px;
+            z-index: 100;
+            color: var(--text);
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.05);
+            border: 2px solid var(--text);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover { transform: rotate(180deg); }
+
+        .theme-toggle svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--text);
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 80px auto 40px;
+            position: relative;
+            z-index: 10;
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 48px;
+            letter-spacing: 10px;
+            text-align: center;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px var(--glow);
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 60px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-card:hover {
+            border-color: var(--text);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px var(--glow);
+        }
+
+        .stat-value {
+            font-family: 'Cinzel', serif;
+            font-size: 48px;
+            color: var(--text);
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px var(--glow);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .info-section {
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .info-section h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: var(--text);
+        }
+
+        .info-section p {
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .feature-card {
+            background: var(--bg);
+            border: 2px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            border-color: var(--text);
+        }
+
+        .feature-card h3 {
+            font-size: 16px;
+            color: var(--text);
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .footer-release {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            color: #6b7280;
+            font-size: 10px;
+            font-family: monospace;
+            z-index: 100;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 32px;
+                letter-spacing: 5px;
+            }
+
+            .stat-value {
+                font-size: 36px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="logo-top">ICARUS</div>
+    
+    <div class="theme-toggle" onclick="toggleTheme();">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+        </svg>
+    </div>
+
+    <div class="container">
+        <h1>ICARUS DASHBOARD</h1>
+        <p class="subtitle">Real-time Intelligence Metrics</p>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value" id="whatsappSent">0</div>
+                <div class="stat-label">WhatsApp Messages Sent</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-value" id="prospectsReached">0</div>
+                <div class="stat-label">Prospects Reached</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-value" id="callsMade">0</div>
+                <div class="stat-label">Calls Made</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-value" id="conversionRate">0%</div>
+                <div class="stat-label">Conversion Rate</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-value" id="activeAgents">0</div>
+                <div class="stat-label">Active AI Agents</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-value" id="avgResponseTime">0s</div>
+                <div class="stat-label">Avg Response Time</div>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h2>What Does Icarus-IA Do?</h2>
+            <p>
+                Icarus-IA is a cognitive financial intelligence platform designed to automate and optimize 
+                business operations through advanced AI agents. Our system handles everything from lead 
+                generation to payment collection with human-like intelligence.
+            </p>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>📞 Automated Outreach</h3>
+                    <p>
+                        Send thousands of personalized WhatsApp messages, emails, and make calls 
+                        automatically. Our AI adapts the message based on customer profile and behavior.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>🧠 Intelligent Follow-up</h3>
+                    <p>
+                        Track customer interactions and automatically follow up at optimal times. 
+                        The system learns from each conversation to improve engagement.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>💰 Payment Collection</h3>
+                    <p>
+                        Automate payment reminders, negotiate payment plans, and handle objections 
+                        with empathy and persistence until collection is complete.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>📊 Real-time Analytics</h3>
+                    <p>
+                        Monitor all activities in real-time. Track conversion rates, response times, 
+                        and ROI with detailed analytics and insights.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>🔗 CRM/ERP Integration</h3>
+                    <p>
+                        Seamlessly integrates with your existing systems. Works with Salesforce, 
+                        HubSpot, SAP, and custom APIs.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>🎯 Lead Qualification</h3>
+                    <p>
+                        Automatically qualify leads based on behavior, company size, and engagement. 
+                        Focus your human team on high-value prospects only.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h2>Core Capabilities</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>⚡ Anchor Points</h3>
+                    <p>Structured decision-making framework for consistent reasoning</p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>🔄 Self-Refinement Loop</h3>
+                    <p>Continuously improves responses through iterative learning</p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>🛡️ Cognitive Guardrails</h3>
+                    <p>ABCD framework ensures ethical and accurate interactions</p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>📈 Multi-Agent Orchestration</h3>
+                    <p>Coordinate multiple AI agents for complex workflows</p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>🗣️ Voice Synthesis & Recognition</h3>
+                    <p>Natural TTS and STT for phone conversations</p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>🎭 Adaptive Personas</h3>
+                    <p>Switch between male/female voices and personalities</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-release">RELEASE T-26D</div>
+
+    <script>
+        window.chtlConfig = { chatbotId: "7825123996" }
+    </script>
+    <script async data-id="7825123996" id="chtl-script" type="text/javascript" src="https://chatling.ai/js/embed.js"></script>
+
+    <script src="./js/tracking.js"></script>
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const current = html.getAttribute('data-theme');
+            const newTheme = current === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('icarus-theme', newTheme);
+        }
+
+        const savedTheme = localStorage.getItem('icarus-theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
+        // Generate stars
+        for (let i = 0; i < 150; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.opacity = Math.random() * 0.7 + 0.2;
+            document.body.appendChild(star);
+        }
+
+        // Animate counters
+        function animateValue(id, start, end, duration, suffix = '') {
+            const element = document.getElementById(id);
+            const range = end - start;
+            const increment = end > start ? 1 : -1;
+            const stepTime = Math.abs(Math.floor(duration / range));
+            let current = start;
+
+            const timer = setInterval(() => {
+                current += increment;
+                element.textContent = current + suffix;
+                if (current === end) {
+                    clearInterval(timer);
+                }
+            }, stepTime);
+        }
+
+        // Simulate real-time data
+        window.addEventListener('load', () => {
+            animateValue('whatsappSent', 0, 5247, 2000);
+            animateValue('prospectsReached', 0, 1893, 2000);
+            animateValue('callsMade', 0, 342, 2000);
+            animateValue('conversionRate', 0, 23, 2000, '%');
+            animateValue('activeAgents', 0, 8, 1000);
+            animateValue('avgResponseTime', 0, 3, 1500, 's');
+
+            // Update values periodically
+            setInterval(() => {
+                const current = parseInt(document.getElementById('whatsappSent').textContent);
+                document.getElementById('whatsappSent').textContent = current + Math.floor(Math.random() * 10);
+            }, 5000);
+
+            if (typeof window.initTracking === 'function') {
+                window.initTracking();
+            }
+        });
+    </script>
+    <script src="./js/chat-sphere.js"></script>
+</body>
+</html>

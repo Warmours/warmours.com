@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>IKARUS CEO Dashboard</title>
+<link rel="stylesheet" href="css/icarus.css">
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+
+<h1>IKARUS – CEO View</h1>
+
+<div class="stats">
+  <div>Llamadas Totales: <span id="totalCalls">0</span></div>
+  <div>Contestadas (#1): <span id="acceptedCalls">0</span></div>
+  <div>% Aceptación: <span id="rate">0%</span></div>
+</div>
+
+<table border="1" width="100%">
+<thead>
+<tr>
+<th>Cliente</th>
+<th>Consentimiento</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody id="callsTable"></tbody>
+</table>
+
+<script>
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "lustinia.firebaseapp.com",
+  projectId: "lustinia"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+db.collection("calls").onSnapshot(snapshot => {
+  let total = 0;
+  let accepted = 0;
+  const table = document.getElementById("callsTable");
+  table.innerHTML = "";
+
+  snapshot.forEach(doc => {
+    const d = doc.data();
+    total++;
+
+    if (d.consent === true) accepted++;
+
+    let phone = d.from || "";
+    phone = phone.slice(-4);
+    phone = "***" + phone;
+
+    let row = `<tr>
+      <td>${phone}</td>
+      <td>${d.consent ? "Sí" : "No"}</td>
+      <td>${d.consent ? "Activo" : "Cerrado"}</td>
+    </tr>`;
+
+    table.innerHTML += row;
+  });
+
+  document.getElementById("totalCalls").innerText = total;
+  document.getElementById("acceptedCalls").innerText = accepted;
+  document.getElementById("rate").innerText = total > 0 ? Math.round((accepted/total)*100)+"%" : "0%";
+});
+</script>
+
+</body>
+</html>
