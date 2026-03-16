@@ -6,3 +6,8 @@ routes = [
   { pattern = "warmours.com/*", zone_name = "warmours.com" },
   { pattern = "www.warmours.com/*", zone_name = "warmours.com" }
 ]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "warmours-registros"
+database_id = "407b95c6-ae5f-4f63-9562-8f72721c0dad"
