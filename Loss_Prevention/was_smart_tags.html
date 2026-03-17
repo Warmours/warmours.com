@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WAS Smart Tags — Catálogo de Dispositivos</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#f5f4f0;
+  --white:#ffffff;
+  --black:#0a0a0a;
+  --green:#1a6b1a;
+  --green-light:#e8f5e8;
+  --green-mid:#2e8b2e;
+  --green-bright:#00c040;
+  --gray:#6b6b6b;
+  --gray-light:#e0ddd8;
+  --red:#c0392b;
+  --gold:#b8860b;
+  --amber:#d4891a;
+  --blue:#3a6fd8;
+  --display:'Bebas Neue',sans-serif;
+  --body:'DM Sans',sans-serif;
+  --mono:'DM Mono',monospace;
+}
+html,body{width:100%;min-height:100%;background:var(--bg);color:var(--black);font-family:var(--body);font-size:17px;line-height:1.6;overflow-x:hidden}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;height:60px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 40px;background:var(--white);
+  border-bottom:2px solid var(--black);z-index:100;
+}
+.nav-brand{display:flex;align-items:center;gap:12px;font-family:var(--display);font-size:22px;letter-spacing:0.1em;color:var(--black);text-decoration:none}
+.nav-shield{width:32px;height:auto}
+.nav-links{display:flex;gap:28px}
+.nav-links a{font-family:var(--mono);font-size:12px;letter-spacing:0.15em;color:var(--gray);text-decoration:none;text-transform:uppercase;transition:color 0.2s}
+.nav-links a:hover,.nav-links a.active{color:var(--black)}
+.nav-cta{background:var(--green);color:var(--white);font-family:var(--body);font-size:13px;font-weight:700;letter-spacing:0.1em;padding:10px 22px;border:none;cursor:pointer;text-transform:uppercase;text-decoration:none;transition:background 0.2s}
+.nav-cta:hover{background:var(--black)}
+
+/* HERO */
+.hero{
+  padding:100px 60px 60px;max-width:1280px;margin:0 auto;
+  display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;
+}
+.hero-label{font-family:var(--mono);font-size:12px;color:var(--green-mid);letter-spacing:0.3em;text-transform:uppercase;margin-bottom:20px}
+.hero h1{font-family:var(--display);font-size:clamp(52px,6vw,80px);line-height:1;letter-spacing:0.04em;color:var(--black);margin-bottom:24px}
+.hero h1 span{color:var(--green)}
+.hero-desc{font-size:18px;color:var(--gray);line-height:1.8;max-width:460px}
+.hero-stats{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--black)}
+.stat-box{background:var(--white);padding:28px 24px}
+.stat-num{font-family:var(--display);font-size:36px;color:var(--green);display:block;margin-bottom:6px}
+.stat-label{font-family:var(--mono);font-size:11px;color:var(--gray);letter-spacing:0.12em;text-transform:uppercase}
+
+/* SECTION DIVIDER */
+.sec-divider{max-width:1280px;margin:0 auto 48px;padding:0 60px;display:flex;align-items:center;gap:20px}
+.sec-divider-line{flex:1;height:2px;background:var(--black)}
+.sec-divider-text{font-family:var(--display);font-size:18px;letter-spacing:0.2em;color:var(--black);text-transform:uppercase;white-space:nowrap}
+
+/* CONFIGURATOR */
+.configurator{max-width:1280px;margin:0 auto;padding:0 60px 80px;display:grid;grid-template-columns:280px 1fr;gap:2px;background:var(--black)}
+
+/* SIDEBAR */
+.config-sidebar{background:var(--white);padding:32px 24px}
+.sidebar-title{font-family:var(--display);font-size:16px;letter-spacing:0.2em;color:var(--black);text-transform:uppercase;margin-bottom:24px;padding-bottom:16px;border-bottom:2px solid var(--black)}
+.filter-group{margin-bottom:28px}
+.filter-label{font-family:var(--mono);font-size:11px;color:var(--green-mid);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:12px;display:block}
+.filter-btn{display:block;width:100%;text-align:left;background:transparent;border:1px solid transparent;padding:10px 12px;font-family:var(--body);font-size:15px;color:var(--gray);cursor:pointer;transition:all 0.15s;margin-bottom:4px}
+.filter-btn:hover{color:var(--black);border-color:var(--gray-light);background:var(--bg)}
+.filter-btn.active{color:var(--green);border-color:var(--green);background:var(--green-light);font-weight:700}
+.filter-btn .btn-count{float:right;font-family:var(--mono);font-size:11px;color:var(--gray)}
+.use-check{display:flex;align-items:center;gap:10px;margin-bottom:10px;cursor:pointer}
+.use-check input{appearance:none;width:16px;height:16px;border:2px solid var(--gray-light);background:transparent;cursor:pointer;position:relative;flex-shrink:0;transition:all 0.15s}
+.use-check input:checked{background:var(--green);border-color:var(--green)}
+.use-check input:checked::after{content:'✓';position:absolute;top:-2px;left:1px;font-size:12px;color:white;font-weight:700}
+.use-check span{font-size:15px;color:var(--black)}
+.config-result{background:var(--green-light);border:2px solid var(--green);padding:18px;margin-top:20px;display:none}
+.config-result.show{display:block}
+.result-title{font-family:var(--mono);font-size:10px;color:var(--green-mid);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:8px}
+.result-tag{font-family:var(--display);font-size:18px;color:var(--black);margin-bottom:4px}
+.result-sku{font-family:var(--mono);font-size:12px;color:var(--green-mid)}
+.request-btn{display:block;width:100%;margin-top:14px;padding:12px;background:var(--green);border:none;color:var(--white);font-family:var(--body);font-size:14px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:background 0.2s}
+.request-btn:hover{background:var(--black)}
+
+/* TAG GRID */
+.config-grid{background:var(--bg);padding:24px;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;align-content:start}
+.tag-card{background:var(--white);padding:24px;cursor:pointer;border:2px solid var(--gray-light);transition:all 0.2s;position:relative;display:flex;flex-direction:column;gap:14px}
+.tag-card:hover{border-color:var(--black);box-shadow:4px 4px 0 var(--black)}
+.tag-card.selected{border-color:var(--green);box-shadow:4px 4px 0 var(--green);background:var(--green-light)}
+.tag-card.hidden{display:none}
+.was-badge{position:absolute;top:12px;right:12px;font-family:var(--mono);font-size:8px;letter-spacing:0.15em;color:var(--gray);border:1px solid var(--gray-light);padding:2px 6px;text-transform:uppercase;background:var(--bg)}
+.tag-visual{display:flex;align-items:center;justify-content:center;height:90px;background:var(--bg);border:1px solid var(--gray-light)}
+.wave-ring{position:absolute;border:1.5px solid;border-radius:50%;opacity:0;animation:wave-pulse 2s ease-out infinite}
+@keyframes wave-pulse{0%{transform:scale(0.6);opacity:0.8}100%{transform:scale(1.8);opacity:0}}
+.wave-ring:nth-child(2){animation-delay:0.5s}
+.wave-ring:nth-child(3){animation-delay:1s}
+.nfc-circle{width:52px;height:52px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:2;position:relative}
+.nfc-label{font-family:var(--display);font-size:10px;color:var(--white);letter-spacing:0.1em}
+.rfid-rect{background:var(--black);border-radius:3px;display:flex;align-items:center;justify-content:center}
+.uwb-circle{background:var(--blue);border-radius:50%;display:flex;align-items:center;justify-content:center}
+.tag-header{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.tag-name{font-family:var(--display);font-size:20px;letter-spacing:0.05em;color:var(--black);line-height:1.1;flex:1}
+.tag-sku{font-family:var(--mono);font-size:10px;color:var(--green-mid);letter-spacing:0.1em;margin-top:3px}
+.tag-check{width:20px;height:20px;border:2px solid var(--gray-light);border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;color:transparent;transition:all 0.2s}
+.tag-card.selected .tag-check{background:var(--green);border-color:var(--green);color:var(--white)}
+.tag-check::after{content:'✓'}
+.tag-dims{display:flex;gap:6px;flex-wrap:wrap}
+.dim-badge{font-family:var(--mono);font-size:11px;color:var(--gray);background:var(--bg);border:1px solid var(--gray-light);padding:4px 8px;letter-spacing:0.06em}
+.tag-desc{font-size:14px;color:var(--gray);line-height:1.7;flex:1}
+.tag-uses{display:flex;flex-wrap:wrap;gap:6px}
+.use-tag{font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:0.08em;padding:4px 9px;border:1px solid;text-transform:uppercase}
+.use-tag.retail{color:var(--amber);border-color:rgba(212,137,26,0.4)}
+.use-tag.media{color:var(--green-mid);border-color:rgba(46,139,46,0.4)}
+.use-tag.biz{color:var(--blue);border-color:rgba(58,111,216,0.4)}
+.use-tag.security{color:var(--red);border-color:rgba(192,57,43,0.4)}
+.use-tag.promo{color:var(--gold);border-color:rgba(184,134,11,0.4)}
+.tag-tech{font-family:var(--mono);font-size:11px;color:var(--green-mid);letter-spacing:0.1em}
+
+/* TESTIMONIALS */
+.testimonials{max-width:1280px;margin:0 auto;padding:60px;border-top:2px solid var(--black)}
+.testimonials-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px;margin-top:40px}
+.testi-card{background:var(--white);border:2px solid var(--gray-light);padding:28px;position:relative;transition:all 0.2s}
+.testi-card:hover{border-color:var(--black);box-shadow:4px 4px 0 var(--black)}
+.testi-quote{font-size:40px;color:var(--green-light);font-family:Georgia,serif;line-height:1;margin-bottom:12px}
+.testi-text{font-size:17px;color:var(--black);line-height:1.7;margin-bottom:20px;font-style:italic}
+.testi-author{display:flex;align-items:center;gap:12px}
+.testi-avatar{width:42px;height:42px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:18px;color:var(--white);flex-shrink:0}
+.testi-name{font-family:var(--body);font-size:15px;font-weight:700;color:var(--black)}
+.testi-loc{font-family:var(--mono);font-size:11px;color:var(--gray);letter-spacing:0.1em;margin-top:2px}
+.testi-flag{position:absolute;top:16px;right:16px;font-size:22px}
+.verified-badge{display:inline-flex;align-items:center;gap:6px;background:var(--green-light);border:1px solid var(--green-mid);padding:4px 10px;margin-top:10px}
+.verified-badge span{font-family:var(--mono);font-size:10px;color:var(--green-mid);letter-spacing:0.1em;text-transform:uppercase}
+
+/* WAVE SECTION */
+.wave-section{max-width:1280px;margin:0 auto;padding:60px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;border-top:2px solid var(--black)}
+.wave-demo{display:flex;align-items:center;justify-content:center;height:260px;position:relative;background:var(--black)}
+.phone-mock{width:56px;height:96px;border:2px solid var(--white);border-radius:10px;position:absolute;top:28px;left:50%;transform:translateX(-50%);background:#111;display:flex;align-items:center;justify-content:center;z-index:3}
+.phone-screen{width:40px;height:68px;background:rgba(0,192,64,0.1);border:1px solid var(--green-bright);margin-top:10px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:7px;color:var(--green-bright);text-align:center;line-height:1.5}
+.nfc-chip-demo{width:44px;height:44px;position:absolute;bottom:28px;background:var(--green);border-radius:4px;z-index:1;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:10px;color:var(--white)}
+.demo-wave{position:absolute;border:2px solid var(--green-bright);border-radius:50%;opacity:0;animation:demo-wave 2.4s ease-out infinite}
+@keyframes demo-wave{0%{width:30px;height:30px;opacity:0.8;bottom:40px;left:50%;transform:translateX(-50%)}100%{width:80px;height:80px;opacity:0;bottom:52px;left:50%;transform:translateX(-50%)}}
+.demo-wave:nth-child(2){animation-delay:0.6s}
+.demo-wave:nth-child(3){animation-delay:1.2s}
+.wave-content h2{font-family:var(--display);font-size:52px;line-height:1;margin-bottom:24px;color:var(--black)}
+.wave-content h2 span{color:var(--green)}
+.wave-content p{font-size:17px;color:var(--gray);line-height:1.8;margin-bottom:16px}
+.wave-tag-name{font-family:var(--mono);font-size:12px;color:var(--green-mid);letter-spacing:0.15em;border:2px solid var(--green);display:inline-block;padding:8px 16px;margin-top:8px;background:var(--green-light)}
+
+/* SPECS */
+.specs-section{max-width:1280px;margin:0 auto;padding:60px;border-top:2px solid var(--black)}
+.section-header{margin-bottom:40px;display:flex;align-items:baseline;gap:20px}
+.section-header h2{font-family:var(--display);font-size:36px;letter-spacing:0.06em;color:var(--black)}
+.section-header .sub{font-family:var(--mono);font-size:12px;color:var(--gray);letter-spacing:0.15em}
+.specs-table{width:100%;border-collapse:collapse}
+.specs-table th{font-family:var(--mono);font-size:11px;letter-spacing:0.15em;color:var(--gray);text-align:left;padding:14px 16px;border-bottom:2px solid var(--black);text-transform:uppercase;white-space:nowrap;background:var(--bg)}
+.specs-table td{padding:16px;border-bottom:1px solid var(--gray-light);font-size:15px;color:var(--gray);vertical-align:middle;background:var(--white)}
+.specs-table tr:hover td{background:var(--bg)}
+.col-name{font-family:var(--display);font-size:16px;color:var(--black);font-weight:400;letter-spacing:0.05em}
+.col-sku{font-family:var(--mono);font-size:11px;color:var(--green-mid);letter-spacing:0.1em}
+.spec-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:8px;vertical-align:middle}
+.dot-nfc{background:var(--green-bright)}.dot-uhf{background:var(--amber)}.dot-uwb{background:var(--blue)}.dot-combo{background:linear-gradient(135deg,var(--green-bright),var(--amber))}
+
+/* FOOTER */
+footer{border-top:2px solid var(--black);padding:36px 60px;display:flex;align-items:center;justify-content:space-between;max-width:1280px;margin:0 auto}
+.footer-left{font-family:var(--mono);font-size:12px;color:var(--gray);letter-spacing:0.08em;line-height:1.8}
+.footer-right{font-family:var(--mono);font-size:11px;color:var(--gray);letter-spacing:0.08em;text-align:right;line-height:1.8}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.hero{animation:fadeUp 0.7s ease both}
+.configurator{animation:fadeUp 0.7s 0.1s ease both}
+
+@media(max-width:900px){
+  .hero,.configurator,.wave-section,.specs-section,.testimonials{padding:80px 24px 40px}
+  .hero,.wave-section{grid-template-columns:1fr}
+  .configurator{grid-template-columns:1fr;padding:0 24px 40px}
+  .nav-links{display:none}
+  footer{flex-direction:column;gap:12px;padding:24px;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-brand">
+    <img src="escudo.png" alt="WAS" class="nav-shield" onerror="this.style.display='none'">
+    WHITE ARMOUR SYSTEMS
+  </a>
+  <div class="nav-links">
+    <a href="index.html">Plataforma</a>
+    <a href="#" class="active">Dispositivos</a>
+    <a href="#config">Configurar</a>
+    <a href="#specs">Especificaciones</a>
+  </div>
+  <a href="mailto:lucarero@warmours.com" class="nav-cta">Solicitar Demo</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div>
+    <p class="hero-label">▸ Catálogo 2025 · WAS Smart Tags</p>
+    <h1>Dispositivos<br><span>inteligentes</span><br>por W.A.S.</h1>
+    <p class="hero-desc">Hardware de rastreo y comunicación NFC/RFID/UWB. Cada dispositivo es configurado, programado y despachado desde W.A.S. — no encontrarás estas configuraciones en ningún otro lugar.</p>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-box"><span class="stat-num">6</span><span class="stat-label">Modelos disponibles</span></div>
+    <div class="stat-box"><span class="stat-num">NFC·UHF·UWB</span><span class="stat-label">Tecnologías integradas</span></div>
+    <div class="stat-box"><span class="stat-num">12+</span><span class="stat-label">Casos de uso</span></div>
+    <div class="stat-box"><span class="stat-num">WAS</span><span class="stat-label">Manufactured & Configured by</span></div>
+  </div>
+</section>
+
+<!-- DIVIDER -->
+<div class="sec-divider" id="config">
+  <div class="sec-divider-line"></div>
+  <span class="sec-divider-text">Selecciona y configura tu etiqueta</span>
+  <div class="sec-divider-line"></div>
+</div>
+
+<!-- CONFIGURATOR -->
+<div class="configurator">
+  <aside class="config-sidebar">
+    <p class="sidebar-title">Filtrar por</p>
+    <div class="filter-group">
+      <span class="filter-label">▸ Tecnología</span>
+      <button class="filter-btn active" data-filter="all">Todos los modelos <span class="btn-count">6</span></button>
+      <button class="filter-btn" data-filter="nfc">NFC / NTAG <span class="btn-count">2</span></button>
+      <button class="filter-btn" data-filter="rfid">RFID UHF <span class="btn-count">2</span></button>
+      <button class="filter-btn" data-filter="uwb">UWB <span class="btn-count">1</span></button>
+      <button class="filter-btn" data-filter="combo">Multi-tech <span class="btn-count">1</span></button>
+    </div>
+    <div class="filter-group">
+      <span class="filter-label">▸ Caso de uso</span>
+      <label class="use-check"><input type="checkbox" value="retail"> <span>Retail / Control de activos</span></label>
+      <label class="use-check"><input type="checkbox" value="media"> <span>Medios impresos / Publicidad</span></label>
+      <label class="use-check"><input type="checkbox" value="promo"> <span>Cupones / Promociones</span></label>
+      <label class="use-check"><input type="checkbox" value="hr"> <span>Reclutamiento / CV digital</span></label>
+      <label class="use-check"><input type="checkbox" value="security"> <span>Seguridad / Anti-tamper</span></label>
+      <label class="use-check"><input type="checkbox" value="biz"> <span>Empresarial / Inventario</span></label>
+    </div>
+    <div class="config-result" id="resultPanel">
+      <p class="result-title">▸ Selección actual</p>
+      <p class="result-tag" id="resultName">—</p>
+      <p class="result-sku" id="resultSku">SKU: —</p>
+      <button class="request-btn" onclick="requestTag()">Solicitar cotización →</button>
+    </div>
+  </aside>
+
+  <div class="config-grid" id="tagGrid">
+    <!-- NFC WAVE ME -->
+    <div class="tag-card" data-tech="nfc" data-uses="media,promo,hr,biz" data-name="WAVE ME — NFC Label" data-sku="WAS-NFC-WM01" onclick="selectTag(this)">
+      <div class="was-badge">WAS MFG</div>
+      <div class="tag-visual">
+        <div style="position:relative;display:flex;align-items:center;justify-content:center">
+          <div class="wave-ring" style="width:52px;height:52px;border-color:rgba(0,192,64,0.6)"></div>
+          <div class="wave-ring" style="width:52px;height:52px;border-color:rgba(0,192,64,0.3)"></div>
+          <div class="nfc-circle"><span class="nfc-label">NFC</span></div>
+        </div>
+      </div>
+      <div class="tag-header">
+        <div><div class="tag-name">WAVE ME</div><div class="tag-sku">WAS-NFC-WM01</div></div>
+        <div class="tag-check"></div>
+      </div>
+      <div class="tag-dims"><span class="dim-badge">⌀ 25mm</span><span class="dim-badge">NTAG 215</span><span class="dim-badge">504 bytes</span></div>
+      <p class="tag-desc">Etiqueta redonda para medios impresos, publicidad y marketing. Compatible con cualquier smartphone sin app. Acerca y activa.</p>
+      <div class="tag-uses"><span class="use-tag media">Medios</span><span class="use-tag promo">Cupones</span><span class="use-tag biz">CV Digital</span></div>
+      <div class="tag-tech">NFC · ISO 14443A · 13.56 MHz</div>
+    </div>
+
+    <!-- NFC SECURE 424 -->
+    <div class="tag-card" data-tech="nfc" data-uses="security,media,retail" data-name="WAS SecurTag NFC 424" data-sku="WAS-NFC-ST424" onclick="selectTag(this)">
+      <div class="was-badge">WAS MFG</div>
+      <div class="tag-visual">
+        <div style="position:relative;display:flex;align-items:center;justify-content:center">
+          <div class="wave-ring" style="width:68px;height:30px;border-color:rgba(0,192,64,0.5);border-radius:4px"></div>
+          <div class="rfid-rect" style="width:68px;height:30px;z-index:2"><span class="nfc-label" style="font-size:8px">SECURE NFC</span></div>
+        </div>
+      </div>
+      <div class="tag-header">
+        <div><div class="tag-name">SecurTag 424</div><div class="tag-sku">WAS-NFC-ST424</div></div>
+        <div class="tag-check"></div>
+      </div>
+      <div class="tag-dims"><span class="dim-badge">55 × 25mm</span><span class="dim-badge">NTAG 424 DNA</span><span class="dim-badge">AES-128</span></div>
+      <p class="tag-desc">Anti-clonación con criptografía AES-128. Detecta apertura de empaque. Ideal para productos premium y documentos de alta seguridad.</p>
+      <div class="tag-uses"><span class="use-tag security">Anti-tamper</span><span class="use-tag retail">Retail</span><span class="use-tag media">Autenticidad</span></div>
+      <div class="tag-tech">NFC · NTAG 424 DNA · AES-128</div>
+    </div>
+
+    <!-- RFID UHF 9000 -->
+    <div class="tag-card" data-tech="rfid" data-uses="retail,biz,security" data-name="WAS RFID+UHF 9000" data-sku="WAS-UHF-9000" onclick="selectTag(this)">
+      <div class="was-badge">WAS MFG</div>
+      <div class="tag-visual">
+        <div class="rfid-rect" style="width:100px;height:38px"><span class="nfc-label" style="font-size:9px">UHF 9000</span></div>
+      </div>
+      <div class="tag-header">
+        <div><div class="tag-name">RFID+UHF 9000</div><div class="tag-sku">WAS-UHF-9000</div></div>
+        <div class="tag-check"></div>
+      </div>
+      <div class="tag-dims"><span class="dim-badge">95 × 20mm</span><span class="dim-badge">860–960 MHz</span><span class="dim-badge">8m lectura</span></div>
+      <p class="tag-desc">Tag UHF de largo alcance para inventario y control de activos. Compatible con lectores Impinj R2000/E710. Lectura masiva en movimiento.</p>
+      <div class="tag-uses"><span class="use-tag retail">Inventario</span><span class="use-tag biz">Activos</span><span class="use-tag security">Control</span></div>
+      <div class="tag-tech">UHF RFID · EPC Gen2 · ISO 18000-63</div>
+    </div>
+
+    <!-- RFID MICRO -->
+    <div class="tag-card" data-tech="rfid" data-uses="retail,biz" data-name="WAS MicroTag UHF" data-sku="WAS-UHF-MX01" onclick="selectTag(this)">
+      <div class="was-badge">WAS MFG</div>
+      <div class="tag-visual">
+        <div class="rfid-rect" style="width:50px;height:28px"><span class="nfc-label" style="font-size:8px">MICRO</span></div>
+      </div>
+      <div class="tag-header">
+        <div><div class="tag-name">MicroTag UHF</div><div class="tag-sku">WAS-UHF-MX01</div></div>
+        <div class="tag-check"></div>
+      </div>
+      <div class="tag-dims"><span class="dim-badge">45 × 20mm</span><span class="dim-badge">IP68</span><span class="dim-badge">On-Metal</span></div>
+      <p class="tag-desc">Formato compacto para superficies metálicas. Resistente a condiciones industriales. Para herramientas, electrónica y activos pequeños.</p>
+      <div class="tag-uses"><span class="use-tag retail">Herramientas</span><span class="use-tag biz">Industrial</span></div>
+      <div class="tag-tech">UHF RFID · On-Metal · IP68</div>
+    </div>
+
+    <!-- UWB -->
+    <div class="tag-card" data-tech="uwb" data-uses="retail,biz,security" data-name="WAS UWB Tracker MK8000" data-sku="WAS-UWB-MK01" onclick="selectTag(this)">
+      <div class="was-badge">WAS MFG</div>
+      <div class="tag-visual">
+        <div style="position:relative;display:flex;align-items:center;justify-content:center;height:80px">
+          <div class="wave-ring" style="width:48px;height:48px;border-color:rgba(58,111,216,0.6)"></div>
+          <div class="wave-ring" style="width:48px;height:48px;border-color:rgba(58,111,216,0.3)"></div>
+          <div class="uwb-circle" style="width:48px;height:48px;z-index:2"><span class="nfc-label" style="font-size:9px;color:white">UWB</span></div>
+        </div>
+      </div>
+      <div class="tag-header">
+        <div><div class="tag-name">UWB MK8000</div><div class="tag-sku">WAS-UWB-MK01</div></div>
+        <div class="tag-check"></div>
+      </div>
+      <div class="tag-dims"><span class="dim-badge">38 × 38mm</span><span class="dim-badge">±10cm precisión</span><span class="dim-badge">12 meses batería</span></div>
+      <p class="tag-desc">Localización en tiempo real con precisión de centímetros. Para rutas anómalas, zonas restringidas y mapa de planta en vivo.</p>
+      <div class="tag-uses"><span class="use-tag security">Trazabilidad</span><span class="use-tag retail">Mapa live</span><span class="use-tag biz">Activos críticos</span></div>
+      <div class="tag-tech">UWB · 6.5 GHz · IEEE 802.15.4a</div>
+    </div>
+
+    <!-- COMBO -->
+    <div class="tag-card" data-tech="combo" data-uses="retail,security,biz,media" data-name="WAS ComboTag Pro" data-sku="WAS-CMB-PRO1" onclick="selectTag(this)">
+      <div class="was-badge">WAS MFG</div>
+      <div class="tag-visual">
+        <div style="display:flex;gap:10px;align-items:center">
+          <div class="rfid-rect" style="width:56px;height:24px"><span class="nfc-label" style="font-size:7px">UHF</span></div>
+          <div class="nfc-circle" style="width:30px;height:30px"><span class="nfc-label" style="font-size:7px">NFC</span></div>
+        </div>
+      </div>
+      <div class="tag-header">
+        <div><div class="tag-name">ComboTag Pro</div><div class="tag-sku">WAS-CMB-PRO1</div></div>
+        <div class="tag-check"></div>
+      </div>
+      <div class="tag-dims"><span class="dim-badge">85 × 54mm</span><span class="dim-badge">NFC + UHF</span><span class="dim-badge">Dual-protocol</span></div>
+      <p class="tag-desc">El tag más versátil: lector de mano escanea UHF para inventario, cliente escanea NFC con smartphone para promociones e información.</p>
+      <div class="tag-uses"><span class="use-tag retail">Retail</span><span class="use-tag promo">Promo NFC</span><span class="use-tag security">Control UHF</span></div>
+      <div class="tag-tech">NFC 13.56 MHz + UHF 860–960 MHz</div>
+    </div>
+  </div>
+</div>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="sec-divider" style="padding:0;margin-bottom:0">
+    <div class="sec-divider-line"></div>
+    <span class="sec-divider-text">Lo que dicen nuestros clientes</span>
+    <div class="sec-divider-line"></div>
+  </div>
+  <div class="testimonials-grid">
+
+    <div class="testi-card">
+      <div class="testi-flag">🇨🇳</div>
+      <div class="testi-quote">"</div>
+      <p class="testi-text">La idea que nos compartieron funcionó perfectamente. Implementamos el sistema en nuestro proceso de control de acceso y los resultados superaron las expectativas. La tecnología es sólida y el soporte fue excelente.</p>
+      <div class="testi-author">
+        <div class="testi-avatar">E</div>
+        <div>
+          <div class="testi-name">Ervin L.</div>
+          <div class="testi-loc">Shanghai, China</div>
+        </div>
+      </div>
+      <div class="verified-badge"><span>✓ Cliente verificado</span></div>
+    </div>
+
+    <div class="testi-card">
+      <div class="testi-flag">🇦🇷</div>
+      <div class="testi-quote">"</div>
+      <p class="testi-text">Instalamos el sistema en nuestra empresa familiar y mis productos ya no son abiertos ni manipulados en tránsito. El tag anti-tamper hace exactamente lo que promete. Una solución que no encontramos en otro lugar.</p>
+      <div class="testi-author">
+        <div class="testi-avatar">R</div>
+        <div>
+          <div class="testi-name">Familia Recio</div>
+          <div class="testi-loc">Buenos Aires, Argentina</div>
+        </div>
+      </div>
+      <div class="verified-badge"><span>✓ Cliente verificado</span></div>
+    </div>
+
+    <div class="testi-card">
+      <div class="testi-flag">🇨🇦</div>
+      <div class="testi-quote">"</div>
+      <p class="testi-text">Gracias por el sistema que instalaste. Desde que implementamos los tags en nuestro inventario, el control es automático y los errores bajaron a casi cero. Lo recomendamos sin dudar.</p>
+      <div class="testi-author">
+        <div class="testi-avatar">M</div>
+        <div>
+          <div class="testi-name">M. & S.</div>
+          <div class="testi-loc">Canadá</div>
+        </div>
+      </div>
+      <div class="verified-badge"><span>✓ Cliente verificado</span></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- WAVE SECTION -->
+<section class="wave-section">
+  <div class="wave-demo">
+    <div class="demo-wave"></div>
+    <div class="demo-wave"></div>
+    <div class="demo-wave"></div>
+    <div class="nfc-chip-demo">NFC</div>
+    <div class="phone-mock">
+      <div class="phone-screen">WAVE<br>ME<br>▲</div>
+    </div>
+  </div>
+  <div class="wave-content">
+    <h2>Acerca.<br>Activa.<br><span>Wave Me.</span></h2>
+    <p>El concepto WAVE ME es simple: el consumidor no necesita saber nada de NFC. Solo ve el ícono y acerca su teléfono. En ese momento, tú controlas exactamente qué pasa — un cupón, una oferta, tu catálogo, un video, un formulario.</p>
+    <p>Cada tag es configurado por W.A.S. antes de despacharse. El cliente recibe hardware listo, con el contenido que necesita.</p>
+    <span class="wave-tag-name">WAS-NFC-WM01 · WAVE ME SERIES</span>
+  </div>
+</section>
+
+<!-- SPECS -->
+<section class="specs-section" id="specs">
+  <div class="section-header">
+    <h2>Especificaciones comparativas</h2>
+    <span class="sub">Todos los modelos · 2025</span>
+  </div>
+  <table class="specs-table">
+    <thead>
+      <tr>
+        <th>Modelo</th><th>SKU</th><th>Tecnología</th><th>Dimensiones</th><th>Alcance</th><th>Memoria / Chip</th><th>Casos principales</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td class="col-name"><span class="spec-dot dot-nfc"></span>WAVE ME</td><td class="col-sku">WAS-NFC-WM01</td><td>NFC 13.56 MHz</td><td>⌀ 25mm</td><td>0–5 cm</td><td>NTAG 215 · 504 bytes</td><td>Medios, cupones, CV, marketing</td></tr>
+      <tr><td class="col-name"><span class="spec-dot dot-nfc"></span>SecurTag 424</td><td class="col-sku">WAS-NFC-ST424</td><td>NFC + AES-128</td><td>55 × 25mm</td><td>0–5 cm</td><td>NTAG 424 DNA · TagTamper</td><td>Autenticidad, anti-clonación</td></tr>
+      <tr><td class="col-name"><span class="spec-dot dot-uhf"></span>RFID+UHF 9000</td><td class="col-sku">WAS-UHF-9000</td><td>UHF 860–960 MHz</td><td>95 × 20mm</td><td>hasta 8m</td><td>EPC Gen2 · Impinj E710</td><td>Inventario masivo, control</td></tr>
+      <tr><td class="col-name"><span class="spec-dot dot-uhf"></span>MicroTag UHF</td><td class="col-sku">WAS-UHF-MX01</td><td>UHF On-Metal</td><td>45 × 20mm</td><td>hasta 4m</td><td>Xerafy IP68 · EPC Gen2</td><td>Herramientas, industrial</td></tr>
+      <tr><td class="col-name"><span class="spec-dot dot-uwb"></span>UWB MK8000</td><td class="col-sku">WAS-UWB-MK01</td><td>UWB 6.5 GHz</td><td>38 × 38mm</td><td>hasta 50m</td><td>MK8000 · ±10cm precisión</td><td>Mapa de planta, rutas críticas</td></tr>
+      <tr><td class="col-name"><span class="spec-dot dot-combo"></span>ComboTag Pro</td><td class="col-sku">WAS-CMB-PRO1</td><td>NFC + UHF dual</td><td>85 × 54mm</td><td>NFC 5cm / UHF 8m</td><td>NTAG 215 + EPC Gen2</td><td>Retail completo: control + cliente</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<footer>
+  <div class="footer-left">
+    © 2025 White Armour Systems — W.A.S.<br>
+    Todos los dispositivos configurados y despachados desde Monterrey, N.L., México.<br>
+    Registrado ante INDAUTOR · ISO 27001
+  </div>
+  <div class="footer-right">
+    warmours.com<br>
+    lucarero@warmours.com
+  </div>
+</footer>
+
+<script>
+document.querySelectorAll('.filter-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const f=btn.dataset.filter;
+    document.querySelectorAll('.tag-card').forEach(card=>{
+      card.classList.toggle('hidden',f!=='all'&&card.dataset.tech!==f);
+    });
+  });
+});
+
+document.querySelectorAll('.use-check input').forEach(cb=>{
+  cb.addEventListener('change',()=>{
+    const checked=[...document.querySelectorAll('.use-check input:checked')].map(x=>x.value);
+    if(checked.length===0){document.querySelectorAll('.tag-card').forEach(c=>c.classList.remove('hidden'));return;}
+    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelector('[data-filter="all"]').classList.add('active');
+    document.querySelectorAll('.tag-card').forEach(card=>{
+      const uses=card.dataset.uses.split(',');
+      card.classList.toggle('hidden',!checked.some(u=>uses.includes(u)));
+    });
+  });
+});
+
+function selectTag(card){
+  document.querySelectorAll('.tag-card').forEach(c=>c.classList.remove('selected'));
+  card.classList.add('selected');
+  document.getElementById('resultName').textContent=card.dataset.name;
+  document.getElementById('resultSku').textContent='SKU: '+card.dataset.sku;
+  document.getElementById('resultPanel').classList.add('show');
+}
+
+function requestTag(){
+  const name=document.getElementById('resultName').textContent;
+  const sku=document.getElementById('resultSku').textContent;
+  const subject=encodeURIComponent('Solicitud de cotización — '+name);
+  const body=encodeURIComponent('Hola equipo W.A.S.,\n\nEstoy interesado en el dispositivo:\n'+name+'\n'+sku+'\n\nPor favor envíenme información de precios y tiempos de entrega.\n\nGracias.');
+  window.location.href='mailto:lucarero@warmours.com?subject='+subject+'&body='+body;
+}
+</script>
+</body>
+</html>
