@@ -3,8 +3,8 @@ main = "worker.js"
 compatibility_date = "2024-01-01"
 
 routes = [
-  { pattern = "warmours.com/*", zone_name = "warmours.com" },
-  { pattern = "www.warmours.com/*", zone_name = "warmours.com" }
+  { pattern = "warmours.com/*", zone_name = "warmours-com" },
+  { pattern = "www.warmours.com/*", zone_name = "warmours-com" }
 ]
 
 [[d1_databases]]
